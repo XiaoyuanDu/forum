@@ -1,11 +1,12 @@
-FROM node:16 AS build
+FROM node:16-alpine
 
-WORKDIR /app
-COPY . .
-RUN yarn && yarn build
+COPY package.json .
+COPY yarn.lock .
+RUN yarn install
 
-FROM nginx
-WORKDIR /usr/share/nginx/html
-RUN rm -rf ./*
-COPY --from=build /app/build .
+COPY public/ ./public/
+COPY src/ ./src/
+
+EXPOSE 3000
+CMD yarn run start
 # FROM node:16 AS build

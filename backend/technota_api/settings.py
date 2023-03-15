@@ -84,11 +84,11 @@ DATABASES = {
      'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'forum',
-        'USER': 'admin',
+        'USER': 'postgres',
         'PASSWORD': 'password',
-        'HOST': 'localhost',
+        'HOST': 'host.docker.internal',
         'PORT': '5432',
-    }
+     }
 }
 
 AUTH_PASSWORD_VALIDATORS = [
