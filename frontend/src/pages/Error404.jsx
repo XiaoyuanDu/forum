@@ -29,11 +29,11 @@ const Error404 = () => {
 				}}
 				mt={4}
 			>
-				Page Not Found!
+				页面好像出走了!
 			</Heading>
 			<Link mt={4} href="/" _hover={{ textDecoration: "none" }}>
 				<Button>
-					<FaArrowLeft style={{ marginRight: 5 }} /> Go Back To Home
+					<FaArrowLeft style={{ marginRight: 5 }} /> 返回首页
 				</Button>
 			</Link>
 		</Flex>

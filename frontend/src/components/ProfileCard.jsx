@@ -142,7 +142,7 @@ const ProfileCard = ({ user, isLoading }) => {
 					py={4}
 					px={6}
 				>
-					<Heading fontSize={"2xl"}>Skills</Heading>
+					<Heading fontSize={"2xl"}>技能</Heading>
 					<Divider my={2} />
 					<Stack align={"center"} direction={"row"} wrap="wrap">
 						{user.profile.skills?.map((skill, i) => {

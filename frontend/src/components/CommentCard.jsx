@@ -10,30 +10,30 @@ import {
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { userContext } from "../stores/User";
-import DeleteAnswerModal from "./DeleteAnswerModal";
-import EditAnswerModal from "./EditAnswerModal";
+import DeleteCommentModal from "./DeleteCommentModal";
+import EditCommentModal from "./EditCommentModal";
 
-const AnswerCard = ({ answer, fetchQuestion }) => {
+const CommentCard = ({ comment, fetchBlog }) => {
 	const CardBackground = useColorModeValue("white", "gray.700");
 	const [user] = useContext(userContext);
 
 	return (
 		<Box my={2} bg={CardBackground} shadow="md" rounded={"lg"} p={6}>
 			<Flex>
-				<Link to={`/profile/${answer.user?.username}`}>
+				<Link to={`/profile/${comment.user?.username}`}>
 					<Flex alignItems="center">
 						<Avatar
 							borderWidth={2}
 							borderColor="primary.500"
 							size={"md"}
-							src={answer.user.profile.image}
+							src={comment.user.profile.image}
 							alt={"Avatar Alt"}
 							loading="lazy"
-							name={answer.user?.username}
+							name={comment.user?.username}
 						/>
 						<Flex direction="column">
 							<Text fontWeight="700" ml={4}>
-								{answer.user.username}
+								{comment.user.username}
 							</Text>
 							<Text
 								color={useColorModeValue(
@@ -43,33 +43,33 @@ const AnswerCard = ({ answer, fetchQuestion }) => {
 								fontSize="sm"
 								ml={4}
 							>
-								@{answer.user.username}
+								@{comment.user.username}
 							</Text>
 						</Flex>
 					</Flex>
 				</Link>
 				<Spacer />
-				{user.id === answer.user.id ? (
+				{user?.id === comment.user.id ? (
 					<Flex alignItems="center">
-						<EditAnswerModal
-							answer={answer}
-							fetchQuestion={fetchQuestion}
+						<EditCommentModal
+							comment={comment}
+							fetchBlog={fetchBlog}
 						/>
-						<DeleteAnswerModal
-							answer={answer}
-							fetchQuestion={fetchQuestion}
+						<DeleteCommentModal
+							comment={comment}
+							fetchBlog={fetchBlog}
 						/>
 					</Flex>
 				) : (
 					<></>
 				)}
 			</Flex>
-			<Text my={4}>{answer.content}</Text>
-			<Text>{`Posted on ${moment(answer.date_created).format(
-				"MMMM Do YYYY"
+			<Text my={4}>{comment.content}</Text>
+			<Text>{`发表于 ${moment(comment.date_created).format(
+				"YYYY年 MM月 D日"
 			)}`}</Text>
 		</Box>
 	);
 };
 
-export default AnswerCard;
+export default CommentCard;

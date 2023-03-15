@@ -8,7 +8,7 @@ import {
 	SkeletonText,
 } from "@chakra-ui/react";
 
-const AnswerCardSkeleton = ({ contentLines }) => {
+const CommentCardSkeleton = ({ contentLines }) => {
 	const CardBackground = useColorModeValue("white", "gray.700");
 	return (
 		<Box my={2} bg={CardBackground} shadow="md" rounded={"lg"} p={6}>
@@ -26,4 +26,4 @@ const AnswerCardSkeleton = ({ contentLines }) => {
 	);
 };
 
-export default AnswerCardSkeleton;
+export default CommentCardSkeleton;

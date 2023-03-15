@@ -20,9 +20,9 @@ import { useContext } from "react";
 import { tokenContext } from "../stores/Token";
 import { Link } from "react-router-dom";
 import { FaCompass } from "react-icons/fa";
-import QuestionTag from "./QuestionTag";
+import BlogTag from "./BlogTag";
 
-const PopularTopicsSkeleton = () => {
+const PopularTagsSkeleton = () => {
 	return Array.from(
 		{ length: 10 },
 		(_, i) => Math.floor(Math.random() * (80 - 40 + 1)) + 40
@@ -39,21 +39,21 @@ const PopularTopicsSkeleton = () => {
 	));
 };
 
-const PopularTopicsCard = () => {
+const PopularTagsCard = () => {
 	const [token] = useContext(tokenContext);
-	const [topics, setTopics] = useState(null);
+	const [tags, setTags] = useState(null);
 	const CardBackground = useColorModeValue("white", "gray.700");
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		axios
 			.get(backendHost + "/api/forum/tags/?page=1&size=10", {
-				headers: {
+				headers: token ? {
 					Authorization: `Bearer ${token.access}`,
-				},
+				} : {},
 			})
 			.then((res) => {
-				setTopics(res.data.results);
+				setTags(res.data.results);
 				setLoading(false);
 			});
 	}, [token]);
@@ -67,7 +67,7 @@ const PopularTopicsCard = () => {
 			px={6}
 		>
 			<Flex alignItems="center">
-				<Heading fontSize={"2xl"}>Popular Topics</Heading>
+				<Heading fontSize={"2xl"}>热点标签</Heading>
 				<Spacer />
 				<Link to="/explore">
 					<Tooltip label="Explore" fontSize="md">
@@ -82,10 +82,10 @@ const PopularTopicsCard = () => {
 			<Divider my={2} />
 			<Stack align={"center"} direction={"row"} wrap="wrap">
 				{loading ? (
-					<PopularTopicsSkeleton />
-				) : topics !== null && topics.length > 0 ? (
-					topics?.map((topic, i) => (
-						<QuestionTag key={i} topic={topic} />
+					<PopularTagsSkeleton />
+				) : tags !== null && tags.length > 0 ? (
+					tags?.map((tag, i) => (
+						<BlogTag key={i} tag={tag} />
 					))
 				) : (
 					<Heading
@@ -95,7 +95,7 @@ const PopularTopicsCard = () => {
 							base: "lg",
 						}}
 					>
-						No Topics Found
+						No Tags Found
 					</Heading>
 				)}
 			</Stack>
@@ -103,4 +103,4 @@ const PopularTopicsCard = () => {
 	);
 };
 
-export default PopularTopicsCard;
+export default PopularTagsCard;

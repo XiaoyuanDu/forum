@@ -301,7 +301,7 @@
 #changelist .actions span.all,
 #changelist .actions span.action-counter,
 #changelist .actions span.clear,
-#changelist .actions span.question {
+#changelist .actions span.blog {
     font-size: 13px;
     margin: 0 0.5em;
 }

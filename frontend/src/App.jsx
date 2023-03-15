@@ -14,19 +14,19 @@ import { backendHost } from "./config";
 // import Profile from "./pages/Profile";
 // import Settings from "./pages/Settings";
 // import UsersBySkills from "./pages/UsersBySkills";
-// import QuestionDetail from "./pages/QuestionDetail";
+// import BlogDetail from "./pages/BlogDetail";
 import { userContext } from "./stores/User";
 import { SetUser } from "./stores/actions/UserActions";
 import { Center, Spinner } from "@chakra-ui/react";
-// import TopicDetailpage from "./pages/TopicDetailpage";
+// import TagDetailpage from "./pages/TagDetailpage";
 // import Explore from "./pages/Explore";
 
 const Home = lazy(() => import("./pages/Home"));
 const Settings = lazy(() => import("./pages/Settings"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Explore = lazy(() => import("./pages/Explore"));
-const TopicDetailpage = lazy(() => import("./pages/TopicDetailpage"));
-const QuestionDetail = lazy(() => import("./pages/QuestionDetail"));
+const TagDetailpage = lazy(() => import("./pages/TagDetailpage"));
+const BlogDetail = lazy(() => import("./pages/BlogDetail"));
 const EmailConfirmation = lazy(() => import("./pages/EmailConfirmation"));
 const UsersBySkills = lazy(() => import("./pages/UsersBySkills"));
 const ForgetPasswordConfirm = lazy(() =>
@@ -117,7 +117,7 @@ function App() {
 					/>
 					<Route
 						path="/explore/:name-:slug"
-						component={TopicDetailpage}
+						component={TagDetailpage}
 					/>
 					<Route path="/explore" component={Explore} />
 
@@ -125,7 +125,7 @@ function App() {
 						path="/users/skills/:skill"
 						component={UsersBySkills}
 					/>
-					<Route path="/questions/:slug" component={QuestionDetail} />
+					<Route path="/blogs/:slug" component={BlogDetail} />
 					<Route path="/settings" component={Settings} />
 					<Route path="/404" component={Error404} />
 					<Redirect to="/404" />

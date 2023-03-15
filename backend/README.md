@@ -30,16 +30,16 @@ technota.company@gmail.com
 
 ### Forum
 
--   [x] Get All Questions / Filtering by Tag / Sort By By Date / By Votes / Searching by name and tag_name
--   [x] Get Tags and Thier No of Questions / Searching tags
+-   [x] Get All Blogs / Filtering by Tag / Sort By By Date / By Votes / Searching by name and tag_name
+-   [x] Get Tags and Thier No of Blogs / Searching tags
 -   [x] Give filtered Users by skills
 
--   [x] Get Single Question / Update / Delete
+-   [x] Get Single Blog / Update / Delete
 -   [ ] User or Post Reporting
--   [ ] Upvote / Downvote of Questions and Answers and Odering according to votes
--   [x] Answers (Create, Edit, Delete)
+-   [ ] Upvote / Downvote of Blogs and Comments and Odering according to votes
+-   [x] Comments (Create, Edit, Delete)
 
--   [ ] User Questions
+-   [ ] User Blogs
 
 -   [ ] Admin Settings 
 

@@ -445,7 +445,7 @@
 .fa-check-circle:before {
   content: "\f058";
 }
-.fa-question-circle:before {
+.fa-blog-circle:before {
   content: "\f059";
 }
 .fa-info-circle:before {
@@ -1009,7 +1009,7 @@
 .fa-chain-broken:before {
   content: "\f127";
 }
-.fa-question:before {
+.fa-blog:before {
   content: "\f128";
 }
 .fa-info:before {

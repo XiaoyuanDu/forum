@@ -7,14 +7,14 @@ import { backendHost } from "../config";
 import { Heading, Grid, Container, GridItem } from "@chakra-ui/react";
 
 import Footer from "../components/Footer";
-import QuestionCard from "../components/QuestionCard";
+import BlogCard from "../components/BlogCard";
 import Pagination from "../components/Pagination";
 import { Helmet } from "react-helmet";
-import QuestionCardSkeleton from "../components/QuestionCardSkeleton";
+import BlogCardSkeleton from "../components/BlogCardSkeleton";
 
-const TopicDetailpage = () => {
+const TagDetailpage = () => {
 	const [token] = useContext(tokenContext);
-	const [questions, setQuestions] = useState(null);
+	const [blogs, setBlogs] = useState(null);
 	const [isError, setIsError] = useState(false);
 	const { name, slug } = useParams();
 
@@ -24,39 +24,36 @@ const TopicDetailpage = () => {
 	const [count, setCount] = useState(0);
 	const [loading, setLoading] = useState(true);
 
-	const fetchTopicQuestions = () => {
-		if (token)
-			axios
-				.get(
-					backendHost +
-						`/api/forum/tags/${slug}/?page=${currentPage}&size=${perPage}`,
-					{
-						headers: {
-							Authorization: `Bearer ${token.access}`,
-						},
-					}
-				)
-				.then((res) => {
-					setQuestions(res.data.results);
-					setCount(res.data.count);
-					setPageCount(res.data.pages_count);
-					setLoading(false);
-				})
-				.catch((err) => setIsError(true));
+	const fetchTagBlogs = () => {
+		axios
+			.get(
+				backendHost +
+				`/api/forum/tags/${slug}/?page=${currentPage}&size=${perPage}`,
+				{
+					headers: token ? {
+						Authorization: `Bearer ${token.access}`,
+					} : {},
+				}
+			)
+			.then((res) => {
+				setBlogs(res.data.results);
+				setCount(res.data.count);
+				setPageCount(res.data.pages_count);
+				setLoading(false);
+			})
+			.catch((err) => setIsError(true));
 	};
 
 	useEffect(() => {
 		window.scrollTo(0, 0);
-		if (token) {
-			fetchTopicQuestions();
-		}
+		fetchTagBlogs();
 	}, [currentPage, perPage]);
 
 	if (isError) return <Redirect to="/404" />;
-	return token ? (
+	return (
 		<>
 			<Helmet>
-				<title>{name} - Technota</title>
+				<title>{name} - 校园博客</title>
 			</Helmet>
 			<Navbar />
 			<Container maxW="container.lg" minWidth="auto">
@@ -69,7 +66,7 @@ const TopicDetailpage = () => {
 						md: "3xl",
 					}}
 				>
-					Questions on {name}
+					{name} 相关的博客
 				</Heading>
 				<Grid
 					mt={4}
@@ -83,14 +80,14 @@ const TopicDetailpage = () => {
 						Array.from({ length: perPage }, (_, i) => i + 1).map(
 							(i) => (
 								<GridItem key={i} colSpan={1}>
-									<QuestionCardSkeleton />
+									<BlogCardSkeleton />
 								</GridItem>
 							)
 						)
-					) : questions !== null && questions.length > 0 ? (
-						questions.map((question, i) => (
+					) : blogs !== null && blogs.length > 0 ? (
+						blogs.map((blog, i) => (
 							<GridItem key={i} colSpan={1}>
-								<QuestionCard question={question} />
+								<BlogCard blog={blog} />
 							</GridItem>
 						))
 					) : (
@@ -103,7 +100,7 @@ const TopicDetailpage = () => {
 								md: "3xl",
 							}}
 						>
-							No Topics Found
+							没有找到标签
 						</Heading>
 					)}
 				</Grid>
@@ -117,9 +114,7 @@ const TopicDetailpage = () => {
 			</Container>
 			<Footer />
 		</>
-	) : (
-		<Redirect to="/login" />
-	);
-};
+	)
+}
 
-export default TopicDetailpage;
+export default TagDetailpage;

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from "react";
 import {
 	Heading,
@@ -14,32 +15,33 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import { useContext } from "react";
 import { userContext } from "../stores/User";
-import EditQuestionModal from "./EditQuestionModal";
-import DeleteQuestionModal from "./DeleteQuestionModal";
-import QuestionTag from "./QuestionTag";
+import EditBlogModal from "./EditBlogModal";
+import DeleteBlogModal from "./DeleteBlogModal";
+import BlogTag from "./BlogTag";
+import StarBlogButton from "./StarBlogButton";
 
-const QuestionCard = ({ question, fetchQuestions }) => {
+const BlogCard = ({ blog, fetchBlogs }) => {
 	const CardBackground = useColorModeValue("white", "gray.700");
 	const ParagraphColor = useColorModeValue("gray.700", "gray.400");
 	const [user] = useContext(userContext);
-
+	console.log(blog.content)
 	return (
 		<Box my={2} bg={CardBackground} shadow="md" rounded={"lg"} p={6}>
 			<Flex>
-				<Link to={`/profile/${question.user?.username}`}>
+				<Link to={`/profile/${blog.user?.username}`}>
 					<Flex alignItems="center">
 						<Avatar
 							borderWidth={2}
 							borderColor="primary.500"
 							size={"md"}
-							src={question.user.profile.image}
+							src={blog.user.profile.image}
 							alt={"Avatar Alt"}
 							loading="lazy"
-							name={question.user?.username}
+							name={blog.user?.username}
 						/>
 						<Flex direction="column">
 							<Text fontWeight="700" ml={4}>
-								{question.user.username}
+								{blog.user.username}
 							</Text>
 							<Text
 								color={useColorModeValue(
@@ -49,43 +51,42 @@ const QuestionCard = ({ question, fetchQuestions }) => {
 								fontSize="sm"
 								ml={4}
 							>
-								@{question.user.username}
+								@{blog.user.username}
 							</Text>
 						</Flex>
 					</Flex>
 				</Link>
 				<Spacer />
-				{user && user.id === question.user.id ? (
-					<Flex alignItems="center">
-						<EditQuestionModal
-							question={question}
-							fetchQuestions={fetchQuestions}
-						/>
-						<DeleteQuestionModal
-							question={question}
-							fetchQuestions={fetchQuestions}
-							isRedirect={false}
-						/>
-					</Flex>
-				) : (
-					<></>
-				)}
+				<Flex alignItems="center">
+					<StarBlogButton blog={blog} fetchBlogs={fetchBlogs}/>
+					{user && user.id === blog.user.id ? (
+						<>
+							<EditBlogModal
+								blog={blog}
+								fetchBlogs={fetchBlogs}
+							/>
+							<DeleteBlogModal
+								blog={blog}
+								isRedirect={true}
+								fetchBlogs={fetchBlogs}
+							/>
+						</>
+					) : (
+						<></>
+					)}
+				</Flex>
 			</Flex>
-			<Link to={`/questions/${question.slug}`}>
+			<Link to={`/blogs/${blog.slug}`}>
 				<Heading mt={4} fontSize={"3xl"}>
-					{question.title}
+					{blog.title}
 				</Heading>
-				<Text>{`Posted on ${moment(question.date_created).format(
-					"MMMM Do YYYY"
-				)}`}</Text>
+				<Text>{`${moment(blog.date_created).format(
+					"YYYY 年 MM 月 D 日 "
+				)} 发布`}</Text>
 				<Text mb={4} textColor={ParagraphColor}>
-					{question.answers.length} Answers
+					{blog.views} 浏览 · {blog.likes} 点赞 · {blog.comments.length} 评论
 				</Text>
-				<Text>
-					{question.content.length <= 200
-						? question.content
-						: `${question.content.substring(0, 200)}...`}
-				</Text>
+
 			</Link>
 			<Divider my={4} />
 			<Stack
@@ -94,12 +95,12 @@ const QuestionCard = ({ question, fetchQuestions }) => {
 				direction={"row"}
 				wrap="wrap"
 			>
-				{question.tags.map((tag, i) => {
-					return <QuestionTag topic={tag} key={i} />;
+				{blog.tags.map((tag, i) => {
+					return <BlogTag tag={tag} key={i} />;
 				})}
 			</Stack>
 		</Box>
 	);
 };
 
-export default QuestionCard;
+export default BlogCard;

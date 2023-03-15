@@ -14,28 +14,31 @@ import {
 	Text,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { backendHost } from "./../config";
+import { backendHost } from "../config";
 import { DeleteIcon } from "@chakra-ui/icons";
+import { useHistory } from "react-router-dom";
 
-const DeleteAnswerModal = ({ answer, fetchQuestion }) => {
+const DeleteBlogModal = ({ blog, fetchBlogs, isRedirect }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [isDeleting, setIsDeleting] = useState(false);
 	const toast = useToast();
+	const history = useHistory();
 
-	const deleteAnswer = () => {
+	const deleteBlog = () => {
 		setIsDeleting(true);
 		axios
-			.delete(backendHost + `/api/forum/answers/${answer.id}/`)
+			.delete(backendHost + `/api/forum/blogs/${blog.slug}/`)
 			.then((res) => {
 				setIsDeleting(false);
 				onClose();
 				toast({
-					title: "Answer Deleted",
+					title: "博客删除成功",
 					status: "error",
 					duration: 20000,
 					isClosable: true,
 				});
-				fetchQuestion();
+				if (isRedirect) history.push("/");
+				else fetchBlogs();
 			})
 			.catch((err) => {
 				setIsDeleting(false);
@@ -46,6 +49,7 @@ const DeleteAnswerModal = ({ answer, fetchQuestion }) => {
 	return (
 		<>
 			<IconButton
+				aria-label="delete-blog"
 				onClick={onOpen}
 				size="sm"
 				colorScheme="red"
@@ -55,22 +59,24 @@ const DeleteAnswerModal = ({ answer, fetchQuestion }) => {
 			<Modal isOpen={isOpen} onClose={onClose} size="xl">
 				<ModalOverlay />
 				<ModalContent onTouchCancel={(e) => e.preventDefault()}>
-					<ModalHeader>Delete Answer</ModalHeader>
+					<ModalHeader>删除博客</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
-						<Text>Do you want to delete answer?</Text>
+						<Text>
+							你确定要删除博客 {blog.title}吗?
+						</Text>
 					</ModalBody>
 					<ModalFooter>
 						<Button
 							mr={3}
 							isLoading={isDeleting}
-							onClick={deleteAnswer}
+							onClick={deleteBlog}
 							colorScheme="red"
 						>
-							Delete
+							删除
 						</Button>
 						<Button colorScheme="gray" onClick={onClose}>
-							Close
+							关闭
 						</Button>
 					</ModalFooter>
 				</ModalContent>
@@ -79,4 +85,4 @@ const DeleteAnswerModal = ({ answer, fetchQuestion }) => {
 	);
 };
 
-export default DeleteAnswerModal;
+export default DeleteBlogModal;

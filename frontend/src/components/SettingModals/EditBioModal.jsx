@@ -31,13 +31,13 @@ const EditBioModal = () => {
 	return (
 		<>
 			<Link onClick={onOpen} pl={2}>
-				<Icon as={FaPencilAlt} /> Edit
+				<Icon as={FaPencilAlt} /> 编辑
 			</Link>
 
 			<Modal isOpen={isOpen} onClose={onClose} size="xl">
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader>Edit Bio</ModalHeader>
+					<ModalHeader>编辑自我介绍</ModalHeader>
 					<ModalCloseButton />
 					<Formik
 						initialValues={{
@@ -45,12 +45,12 @@ const EditBioModal = () => {
 						}}
 						validationSchema={Yup.object({
 							bio: Yup.string()
-								.min(5, "Must be atleast 5 characters")
+								.min(5, "最少5个字符")
 								.max(
 									100,
-									"Must be Atleast 100 Characters or less"
+									"最多100个字符"
 								)
-								.required("This Field is Required"),
+								.required("内容不能为空"),
 						})}
 						onSubmit={(
 							{ bio },
@@ -66,7 +66,7 @@ const EditBioModal = () => {
 									onClose();
 									userDispatch(UpdateBio(bio));
 									toast({
-										title: "Bio Successfully Updated",
+										title: "成功更新自我介绍",
 										status: "success",
 										duration: 20000,
 										isClosable: true,
@@ -94,13 +94,13 @@ const EditBioModal = () => {
 										type="submit"
 										mr={3}
 									>
-										Edit
+										编辑
 									</Button>
 									<Button
 										colorScheme="gray"
 										onClick={onClose}
 									>
-										Close
+										关闭
 									</Button>
 								</ModalFooter>
 							</Form>

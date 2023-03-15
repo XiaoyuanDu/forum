@@ -37,13 +37,13 @@ const DeleteAccountModal = () => {
 				leftIcon={<DeleteIcon />}
 				colorScheme="red"
 			>
-				Delete Account
+				注销账户
 			</Button>
 
 			<Modal isOpen={isOpen} onClose={onClose} size="xl">
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader>Delete Account</ModalHeader>
+					<ModalHeader>注销账户</ModalHeader>
 					<ModalCloseButton />
 					<Formik
 						initialValues={{
@@ -103,11 +103,11 @@ const DeleteAccountModal = () => {
 							<Form>
 								<ModalBody>
 									<MyFormTextInput
-										label="Current Password"
+										label="当前密码"
 										name="current_password"
 										type="password"
 										icon={FaKey}
-										placeholder="Current Password"
+										placeholder="当前密码"
 									/>
 								</ModalBody>
 								<ModalFooter>
@@ -117,13 +117,13 @@ const DeleteAccountModal = () => {
 										mr={3}
 										colorScheme="red"
 									>
-										Delete Account
+										注销账户
 									</Button>
 									<Button
 										colorScheme="gray"
 										onClick={onClose}
 									>
-										Close
+										关闭
 									</Button>
 								</ModalFooter>
 							</Form>

@@ -47,12 +47,11 @@ export default function Footer() {
 				justify={{ base: "center", md: "space-between" }}
 				align={{ base: "center", md: "center" }}
 			>
-				<img src={config.logo} width={30} alt="" />
 				<Text>
 					© {new Date().getFullYear()} {config.title}. All rights
 					reserved
 				</Text>
-				<Stack direction={"row"} spacing={6}>
+				{/* <Stack direction={"row"} spacing={6}>
 					<SocialButton
 						label={"Facebook"}
 						href={socialLinks.facebook}
@@ -67,8 +66,8 @@ export default function Footer() {
 					</SocialButton>
 					<SocialButton label={"Github"} href={socialLinks.github}>
 						<FaGithub />
-					</SocialButton>
-				</Stack>
+					</SocialButton> */}
+				{/* </Stack> */}
 			</Container>
 		</Box>
 	);

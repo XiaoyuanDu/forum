@@ -113,7 +113,7 @@ const UpdateAvatarModal = () => {
 					onClose();
 					setImgSrc(null);
 					toast({
-						title: "Avatar Successfully Updated",
+						title: "成功更新头像",
 						status: "success",
 						duration: 20000,
 						isClosable: true,
@@ -127,7 +127,7 @@ const UpdateAvatarModal = () => {
 
 	return (
 		<>
-			<Button onClick={onOpen}>Update Avatar</Button>
+			<Button onClick={onOpen}>更新头像</Button>
 
 			<Modal
 				isOpen={isOpen}
@@ -139,7 +139,7 @@ const UpdateAvatarModal = () => {
 			>
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader>Update Avatar</ModalHeader>
+					<ModalHeader>更新头像</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
 						{!imgSrc ? (
@@ -153,11 +153,11 @@ const UpdateAvatarModal = () => {
 							>
 								<input {...getInputProps()} />
 								{isDragActive ? (
-									<p>Drop the files here ...</p>
+									<p>把文件拖入到这里</p>
 								) : (
 									<p>
-										Drag or drop some files here, or click
-										to <Link href="#">Select Files</Link>
+										把文件拖入这里或点击
+										 <Link href="#">选择文件</Link>
 									</p>
 								)}
 							</chakra.div>
@@ -176,7 +176,7 @@ const UpdateAvatarModal = () => {
 					<ModalFooter>
 						{imgSrc ? (
 							<Button mr={3} onClick={getCroppedImage}>
-								Update
+								更新
 							</Button>
 						) : null}
 
@@ -187,7 +187,7 @@ const UpdateAvatarModal = () => {
 								setImgSrc(null);
 							}}
 						>
-							Close
+							关闭
 						</Button>
 					</ModalFooter>
 				</ModalContent>

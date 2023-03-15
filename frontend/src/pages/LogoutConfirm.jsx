@@ -27,7 +27,7 @@ const LogoutConfirm = () => {
 						md: "4xl",
 					}}
 				>
-					Do You Want To Logout?
+					你确定要登出吗?
 				</Heading>
 				<Button
 					mt={4}
@@ -36,7 +36,7 @@ const LogoutConfirm = () => {
 						userDispatch(DeleteUserState());
 					}}
 				>
-					Logout
+					登出
 				</Button>
 			</Flex>
 		</>

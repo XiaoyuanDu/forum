@@ -32,25 +32,25 @@ const Signup = () => {
 				}}
 				validationSchema={Yup.object({
 					username: Yup.string()
-						.min(3, "Must be atleast 3 characters")
-						.max(12, "Must be Atleast 12 Characters or less")
-						.required("This Field is Required"),
+						.min(3, "最少3个字符")
+						.max(12, "最多12个字符")
+						.required("用户名不能为空"),
 					email: Yup.string()
-						.email("Invalid Email")
-						.required("This Field is Required"),
+						.email("无效的邮箱地址")
+						.required("邮箱地址不能为空"),
 					password: Yup.string()
-						.min(8, "Must be atleast 8 characters")
-						.max(20, "Must be Atleast 20 Characters or less")
-						.required("This Field is Required"),
+						.min(8, "最少8个字符")
+						.max(20, "最多20个字符")
+						.required("密码不能为空"),
 					confirm_password: Yup.string()
-						.min(8, "Must be atleast 8 characters")
-						.max(20, "Must be Atleast 20 Characters or less")
-						.required("This Field is Required")
+						.min(8, "最少8个字符")
+						.max(20, "最多20个字符")
+						.required("确认密码不能为空")
 						.when("password", {
 							is: (val) => (val && val.length > 0 ? true : false),
 							then: Yup.string().oneOf(
 								[Yup.ref("password")],
-								"Password does not match"
+								"两次输入密码不一致！"
 							),
 						}),
 				})}
@@ -67,14 +67,6 @@ const Signup = () => {
 						.then((res) => {
 							if (res.status === 201) {
 								resetForm();
-								toast({
-									title: "Account created.",
-									description:
-										"Please Click on the link that has just been sent to your email address to verify your email and activate your account",
-									status: "success",
-									duration: 20000,
-									isClosable: true,
-								});
 							}
 							setSubmitting(false);
 						})
@@ -99,34 +91,34 @@ const Signup = () => {
 				{(props) => (
 					<Form>
 						<MyFormTextInput
-							label="Username"
+							label="用户名"
 							icon={FaUserAlt}
 							name="username"
-							placeholder="Username"
+							placeholder="用户名"
 						/>
 						<MyFormTextInput
-							label="Email"
+							label="邮箱"
 							name="email"
 							icon={FaEnvelope}
 							placeholder="example@example.com"
 						/>
 						<MyFormTextInput
-							label="Password"
+							label="密码"
 							name="password"
 							type="password"
 							icon={FaKey}
-							placeholder="Password"
+							placeholder="密码"
 						/>
 						<MyFormTextInput
-							label="Confirm Password"
+							label="确认密码"
 							name="confirm_password"
 							type="password"
 							icon={FaKey}
-							placeholder="Confirm Password"
+							placeholder="确认密码"
 						/>
 						<Text mt={4}>
-							Already have Account?{" "}
-							<TextLink text="Login" to="/login" />
+							已经有账户了?{" "}
+							<TextLink text="登录" to="/login" />
 						</Text>
 						<Button
 							mt={4}
@@ -135,7 +127,7 @@ const Signup = () => {
 							isFullWidth={true}
 							leftIcon={<FaUserPlus />}
 						>
-							Signup
+							注册
 						</Button>
 					</Form>
 				)}

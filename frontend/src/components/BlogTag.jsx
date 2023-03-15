@@ -2,20 +2,20 @@ import { Badge } from "@chakra-ui/react";
 import React from "react";
 import { Link } from "react-router-dom";
 
-const QuestionTag = ({ topic }) => {
+const BlogTag = ({ tag }) => {
 	return (
 		<Link
-			to={`/explore/${topic.name}-${topic.slug}`}
+			to={`/explore/${tag.name}-${tag.slug}`}
 			style={{
 				marginBottom: 3,
 				marginLeft: 3,
 			}}
 		>
 			<Badge px={2} py={1} fontSize=".8em">
-				{topic.name}
+				{tag.name}
 			</Badge>
 		</Link>
 	);
 };
 
-export default QuestionTag;
+export default BlogTag;

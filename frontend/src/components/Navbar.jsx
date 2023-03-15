@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Box,
 	Flex,
@@ -15,6 +15,8 @@ import {
 	Menu,
 	MenuButton,
 	MenuList,
+	Text,
+	Link,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import {
@@ -29,10 +31,11 @@ import {
 	FaUserPlus,
 } from "react-icons/fa";
 import { tokenContext } from "../stores/Token";
-import { config } from "../config";
+import { adminHost, backendHost, config } from "../config";
 import Headroom from "react-headroom";
 import { userContext } from "../stores/User";
 import { Link as RouterLink } from "react-router-dom";
+import axios from "axios";
 
 const NavLink = ({ children, href, icon }) => (
 	<RouterLink to={href}>
@@ -59,7 +62,31 @@ export default function Navbar() {
 	const [user] = React.useContext(userContext);
 	const { colorMode, toggleColorMode } = useColorMode();
 	const { isOpen, onOpen, onClose } = useDisclosure();
-
+	const [isAdmin, setIsAdmin] = useState(false);
+	const isUserAdmin = () => {
+		if (token !== null){
+			axios.get(backendHost + '/api/users/is_admin/', {
+				headers: {
+					Authorization: `Bearer ${token.access}`,
+				}
+			}).then((res) => {
+				console.debug(res)
+				if (res.status === 200) {
+					setIsAdmin(res.data.is_admin)
+				} else {
+					setIsAdmin(false)
+				}
+				
+			}
+			).catch((err) => { setIsAdmin(false) })
+		} else {
+			setIsAdmin(false)
+		}
+		
+	}
+	useEffect(() => {
+		isUserAdmin()
+	}, [token])
 	return (
 		<Headroom>
 			<Box px={4} bg={useColorModeValue("gray.50", "gray.700")}>
@@ -80,7 +107,7 @@ export default function Navbar() {
 						<HStack spacing={8} alignItems={"center"}>
 							<Box>
 								<RouterLink to="/">
-									<img src={config.logo} width={30} alt="" />{" "}
+									<Text fontSize='2xl' fontWeight='bold'> 校园博客 </Text>
 								</RouterLink>
 							</Box>
 							<HStack
@@ -88,35 +115,36 @@ export default function Navbar() {
 								spacing={4}
 								display={{ base: "none", md: "flex" }}
 							>
-								{token ? (
-									<>
-										<NavLink
-											href="/"
-											icon={<Icon as={FaHome} />}
-										>
-											Home
-										</NavLink>
-										<NavLink
-											icon={<Icon as={FaCompass} />}
-											href="/explore"
-										>
-											Explore
-										</NavLink>
+								<>
+									<NavLink
+										href="/"
+										icon={<Icon as={FaHome} />}
+									>
+										首页
+									</NavLink>
+									<NavLink
+										icon={<Icon as={FaCompass} />}
+										href="/explore"
+									>
+										探索
+									</NavLink>
 
-										<Menu>
-											<MenuButton
-												as={Button}
-												colorScheme="gray"
-												rightIcon={<ChevronDownIcon />}
-											>
-												User
-											</MenuButton>
+									<Menu>
+										<MenuButton
+											as={Button}
+											colorScheme="gray"
+											rightIcon={<ChevronDownIcon />}
+										>
+											用户
+										</MenuButton>
+
+										{token ? (
 											<MenuList>
 												<MenuLink
 													href={`/profile/${user?.username}`}
 													icon={<Icon as={FaUser} />}
 												>
-													Profile
+													个人资料
 												</MenuLink>
 												<MenuLink
 													icon={
@@ -126,40 +154,45 @@ export default function Navbar() {
 													}
 													href="/logout"
 												>
-													Logout
+													登出
 												</MenuLink>
 												<MenuLink
 													icon={<Icon as={FaCog} />}
 													href="/settings"
 												>
-													Settings
+													设置
+												</MenuLink>
+											</MenuList>) : (
+											<MenuList>
+												<MenuLink
+													icon={<Icon as={FaSignInAlt} />}
+													href="/login"
+												>
+													登录
+												</MenuLink>
+												<MenuLink
+													icon={<Icon as={FaUserPlus} />}
+													href="/signup"
+												>
+													注册
 												</MenuLink>
 											</MenuList>
-										</Menu>
-									</>
-								) : (
-									<>
-										<NavLink
-											icon={<Icon as={FaSignInAlt} />}
-											href="/login"
-										>
-											Login
-										</NavLink>
-										<NavLink
-											icon={<Icon as={FaUserPlus} />}
-											href="/signup"
-										>
-											Signup
-										</NavLink>
-									</>
-								)}
+										)
+										}
+
+									</Menu>
+									{		console.log(isAdmin)}
+									{isAdmin ? (<a href={`${adminHost}/admin/default`} rel="noopener noreferrer" target="_blank">
+										<Text fontWeight={700} fontSize={16}>博客管理</Text>
+									</a>) : <></>}
+								</>
 							</HStack>
 						</HStack>
 						<Flex alignItems={"center"}>
 							<IconButton
 								aria-label="dark-mode-toggle"
 								colorScheme="gray"
-								onClick={toggleColorMode}
+								onClick={() => { toggleColorMode(); document.documentElement.setAttribute('data-color-mode', colorMode == 'dark' ? 'light' : 'dark') }}
 								icon={
 									colorMode === "light" ? (
 										<FaMoon />

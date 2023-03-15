@@ -12,7 +12,7 @@ import {
 	SkeletonText,
 } from "@chakra-ui/react";
 
-const QuestionCardSkeleton = ({ contentLines }) => {
+const BlogCardSkeleton = ({ contentLines }) => {
 	const CardBackground = useColorModeValue("white", "gray.700");
 	return (
 		<Box my={2} bg={CardBackground} shadow="md" rounded={"lg"} p={6}>
@@ -56,4 +56,4 @@ const QuestionCardSkeleton = ({ contentLines }) => {
 	);
 };
 
-export default QuestionCardSkeleton;
+export default BlogCardSkeleton;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
 	Modal,
 	ModalOverlay,
@@ -15,18 +15,22 @@ import {
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import axios from "axios";
-import { backendHost } from "./../config";
+import { backendHost } from "../config";
 import MyFormTextareaInput from "./TextFields/MyFormTextAreaInput";
 import { EditIcon } from "@chakra-ui/icons";
+import MyFormTextInput from "./TextFields/MyFormTextInput";
+import MyFormMarkdownInput from "./TextFields/MyFormMarkdownInput";
 
-const EditAnswerModal = ({ answer, fetchQuestion }) => {
+const EditBlogModal = ({ blog, fetchBlogs }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const [content, setContent] = useState('\n\n\n\n\n\n\n\n\n')
+
 	const toast = useToast();
 
 	return (
 		<>
 			<IconButton
-				aria-label="edit-answer"
+				aria-label="edit-blog"
 				onClick={onOpen}
 				size="sm"
 				mr={1}
@@ -37,39 +41,54 @@ const EditAnswerModal = ({ answer, fetchQuestion }) => {
 			<Modal isOpen={isOpen} onClose={onClose} size="xl">
 				<ModalOverlay />
 				<ModalContent onTouchCancel={(e) => e.preventDefault()}>
-					<ModalHeader>Edit Answer</ModalHeader>
+					<ModalHeader>编辑博客</ModalHeader>
 					<ModalCloseButton />
 					<Formik
 						initialValues={{
-							content: answer.content,
+							title: blog.title,
+							tags: blog.tags
+								.map((obj) => obj.name)
+								.toString(),
 						}}
 						validationSchema={Yup.object({
-							content: Yup.string()
+							title: Yup.string()
+								.min(10, "最少十个字符")
 								.max(
-									1000,
-									"Must be Atleast 1000 Characters or less"
+									250,
+									"最多250个字符"
 								)
-								.required("This Field is Required"),
+								.required("标题不能为空！"),
+							tags: Yup.string()
+								.max(
+									150,
+									"最多150个字符"
+								)
+								.required("标签不能为空"),
 						})}
 						onSubmit={(
-							{ content },
+							{ title, tags },
 							{ setSubmitting, resetForm, setFieldError }
 						) => {
+							let tagsArray = tags.split(",").map((str) => ({
+								name: str,
+							}));
 							axios
 								.put(
 									backendHost +
-										`/api/forum/answers/${answer.id}/`,
+										`/api/forum/blogs/${blog.slug}/`,
 									{
-										content,
+										title,
+										content: content.replace(/^\s+|\s+$/g,''),
+										tags: tagsArray,
 									}
 								)
 								.then((res) => {
 									resetForm();
 									setSubmitting(false);
-									fetchQuestion();
+									fetchBlogs();
 									onClose();
 									toast({
-										title: "Answer Updated Sucessfully",
+										title: "成功更新博客",
 										status: "success",
 										duration: 20000,
 										isClosable: true,
@@ -99,11 +118,26 @@ const EditAnswerModal = ({ answer, fetchQuestion }) => {
 						{(props) => (
 							<Form>
 								<ModalBody>
-									<MyFormTextareaInput
-										label="Content"
+									<MyFormTextInput
+										label="标题"
+										name="title"
+										placeholder="标题"
+										maxLength={250}
+									/>
+									<MyFormMarkdownInput
+										label="内容"
 										name="content"
-										placeholder="Content"
+										placeholder="内容"
 										maxLength={1000}
+										value={content}
+										onChange={(value, viewUpdate) => setContent(value)}
+									/>
+									<MyFormTextareaInput
+										label="标签"
+										name="tags"
+										placeholder="标签"
+										maxLength={150}
+										helpText="Seprate each tag with comma"
 									/>
 								</ModalBody>
 								<ModalFooter>
@@ -113,13 +147,13 @@ const EditAnswerModal = ({ answer, fetchQuestion }) => {
 										colorScheme="orange"
 										mr={3}
 									>
-										Edit
+										编辑
 									</Button>
 									<Button
 										colorScheme="gray"
 										onClick={onClose}
 									>
-										Close
+										关闭
 									</Button>
 								</ModalFooter>
 							</Form>
@@ -131,4 +165,4 @@ const EditAnswerModal = ({ answer, fetchQuestion }) => {
 	);
 };
 
-export default EditAnswerModal;
+export default EditBlogModal;

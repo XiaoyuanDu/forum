@@ -1,18 +1,12 @@
 import os
 from pathlib import Path
-import django_heroku
-import dj_database_url
 from datetime import timedelta
-from decouple import config
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-ENVIRONMENT = config("ENVIRONMENT")
-SECRET_KEY = config("SECRET_KEY")
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
+SECRET_KEY = '_x%b#qd^8!ykon)h0kqrb20asefk--8s9b^v5w38@zwn))*2^@'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,7 +23,6 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'cloudinary_storage',
     'cloudinary',
-    "djcelery_email",
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
@@ -50,6 +43,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://localhost:3001",
     "https://technota.netlify.app"
 ]
 
@@ -58,9 +52,9 @@ CORS_ALLOW_METHODS = [
 ]
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': config("CLOUDINARY_CLOUD_NAME"),
-    'API_KEY': config("CLOUDINARY_API_KEY"),
-    'API_SECRET': config("CLOUDINARY_API_SECRET"),
+    'CLOUD_NAME': "dom7gquum",
+    'API_KEY': "382462481819695",
+    'API_SECRET': "MACpC9SmSBo_nplhs33OaPAWx9I",
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
@@ -87,9 +81,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'technota_api.wsgi.application'
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=config("DATABASE_URL")
-    )
+     'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'forum',
+        'USER': 'admin',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -127,14 +126,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = config("EMAIL_USER")
-EMAIL_HOST_PASSWORD = config("EMAIL_PASSWORD")
-EMAIL_PORT = 587
-
-CELERY_BROKER_URL = config("CELERY_BROKER")
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -154,7 +145,7 @@ SIMPLE_JWT = {
 DJOSER = {
     "USER_ID_FIELD": "username",
     "LOGIN_FIELD": "email",
-    "SEND_ACTIVATION_EMAIL": True,
+    "SEND_ACTIVATION_EMAIL": False,
     "ACTIVATION_URL": "email-confirmation/{uid}/{token}",
     "PASSWORD_RESET_CONFIRM_URL": "forget-password-confirm/{uid}/{token}",
     'SERIALIZERS': {
@@ -163,31 +154,3 @@ DJOSER = {
         "current_user": 'users.serializers.UserSerializer',
     },
 }
-
-if ENVIRONMENT == "production":
-    DEBUG = False
-    DATABASES['default'] = dj_database_url.config(
-        default=config("DATABASE_URL")
-    )
-
-    sentry_sdk.init(
-        dsn="https://a08b6c62505d495fa0881e6da0adb287@o1032827.ingest.sentry.io/5999765",
-        integrations=[DjangoIntegration()],
-        traces_sample_rate=1.0,
-        send_default_pii=True
-    )
-
-    SESSION_COOKIE_HTTPONLY = True
-    CSRF_COOKIE_HTTPONLY = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_BROWSER_XSS_FILTER = True
-    CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SECURE = True
-    SECURE_HSTS_SECONDS = 15768000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SECURE_SSL_REDIRECT = True
-    SECURE_BROWSER_XSS_FILTER = True
-
-    django_heroku.settings(locals())

@@ -15,19 +15,18 @@ import {
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import axios from "axios";
-import { backendHost } from "./../config";
+import { backendHost } from "../config";
 import MyFormTextareaInput from "./TextFields/MyFormTextAreaInput";
 import { EditIcon } from "@chakra-ui/icons";
-import MyFormTextInput from "./TextFields/MyFormTextInput";
 
-const EditQuestionModal = ({ question, fetchQuestions }) => {
+const EditCommentModal = ({ comment, fetchBlog }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const toast = useToast();
 
 	return (
 		<>
 			<IconButton
-				aria-label="edit-question"
+				aria-label="edit-comment"
 				onClick={onOpen}
 				size="sm"
 				mr={1}
@@ -38,61 +37,39 @@ const EditQuestionModal = ({ question, fetchQuestions }) => {
 			<Modal isOpen={isOpen} onClose={onClose} size="xl">
 				<ModalOverlay />
 				<ModalContent onTouchCancel={(e) => e.preventDefault()}>
-					<ModalHeader>Edit Question</ModalHeader>
+					<ModalHeader>Edit comment</ModalHeader>
 					<ModalCloseButton />
 					<Formik
 						initialValues={{
-							title: question.title,
-							content: question.content,
-							tags: question.tags
-								.map((obj) => obj.name)
-								.toString(),
+							content: comment.content,
 						}}
 						validationSchema={Yup.object({
-							title: Yup.string()
-								.min(10, "Must be atleast 10 characters")
-								.max(
-									250,
-									"Must be Atleast 250 Characters or less"
-								)
-								.required("This Field is Required"),
 							content: Yup.string()
 								.max(
 									1000,
 									"Must be Atleast 1000 Characters or less"
 								)
 								.required("This Field is Required"),
-							tags: Yup.string()
-								.max(
-									150,
-									"Must be Atleast 150 Characters or less"
-								)
-								.required("This Field is Required"),
 						})}
 						onSubmit={(
-							{ title, content, tags },
+							{ content },
 							{ setSubmitting, resetForm, setFieldError }
 						) => {
-							let tagsArray = tags.split(",").map((str) => ({
-								name: str,
-							}));
 							axios
 								.put(
 									backendHost +
-										`/api/forum/questions/${question.slug}/`,
+										`/api/forum/comments/${comment.id}/`,
 									{
-										title,
 										content,
-										tags: tagsArray,
 									}
 								)
 								.then((res) => {
 									resetForm();
 									setSubmitting(false);
-									fetchQuestions();
+									fetchBlog();
 									onClose();
 									toast({
-										title: "Question Updated Sucessfully",
+										title: "comment Updated Sucessfully",
 										status: "success",
 										duration: 20000,
 										isClosable: true,
@@ -122,24 +99,11 @@ const EditQuestionModal = ({ question, fetchQuestions }) => {
 						{(props) => (
 							<Form>
 								<ModalBody>
-									<MyFormTextInput
-										label="Title"
-										name="title"
-										placeholder="Title"
-										maxLength={250}
-									/>
 									<MyFormTextareaInput
 										label="Content"
 										name="content"
 										placeholder="Content"
 										maxLength={1000}
-									/>
-									<MyFormTextareaInput
-										label="Tags"
-										name="tags"
-										placeholder="Tags"
-										maxLength={150}
-										helpText="Seprate each tag with comma"
 									/>
 								</ModalBody>
 								<ModalFooter>
@@ -167,4 +131,4 @@ const EditQuestionModal = ({ question, fetchQuestions }) => {
 	);
 };
 
-export default EditQuestionModal;
+export default EditCommentModal;

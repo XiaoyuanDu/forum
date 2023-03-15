@@ -21,7 +21,7 @@ const Header = () => {
 					color="gray.400"
 					textTransform="uppercase"
 				>
-					For Developers
+					大学校园博客论坛
 				</chakra.p>
 				<Heading
 					fontSize={{

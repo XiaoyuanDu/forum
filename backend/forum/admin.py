@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import Question, Answer, QuestionTag
+from .models import Blog, Comment, BlogTag
 # Register your models here.
 
 
-@admin.register(Question)
-class QuestionAdmin(admin.ModelAdmin):
+@admin.register(Blog)
+class BlogAdmin(admin.ModelAdmin):
 
     list_display = [
         'title', 'date_created', 'date_modified'
@@ -17,5 +17,5 @@ class QuestionAdmin(admin.ModelAdmin):
     ]
 
 
-admin.site.register(Answer)
-admin.site.register(QuestionTag)
+admin.site.register(Comment)
+admin.site.register(BlogTag)

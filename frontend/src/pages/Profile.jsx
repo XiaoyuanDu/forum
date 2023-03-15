@@ -6,17 +6,17 @@ import Navbar from "../components/Navbar";
 import { Heading, Grid, Container, GridItem } from "@chakra-ui/react";
 import ProfileCard from "../components/ProfileCard";
 import Footer from "../components/Footer";
-import QuestionCard from "../components/QuestionCard";
+import BlogCard from "../components/BlogCard";
 import Pagination from "../components/Pagination";
 import { useContext } from "react";
 import { tokenContext } from "../stores/Token";
 import { Helmet } from "react-helmet";
-import QuestionCardSkeleton from "../components/QuestionCardSkeleton";
+import BlogCardSkeleton from "../components/BlogCardSkeleton";
 
 const Profile = () => {
 	const [token] = useContext(tokenContext);
 	const [user, setUser] = useState(null);
-	const [questions, setQuestions] = useState(null);
+	const [blogs, setBlogs] = useState(null);
 	const [isError, setIsError] = useState(false);
 	const { username } = useParams();
 
@@ -25,23 +25,23 @@ const Profile = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [count, setCount] = useState(0);
 	const [loadingProfile, setLoadingProfile] = useState(true);
-	const [loadingQuestions, setLoadingQuestions] = useState(true);
+	const [loadingblogs, setLoadingBlogs] = useState(true);
 
-	const fetchQuestions = () => {
+	const fetchBlogs = () => {
 		axios
 			.get(
 				backendHost +
-					`/api/users/questions/${username}/?page=${currentPage}&size=${perPage}`
+					`/api/users/blogs/${username}/?page=${currentPage}&size=${perPage}`
 			)
 			.then((res) => {
-				setQuestions(res.data.results);
+				setBlogs(res.data.results);
 				setCount(res.data.count);
 				setPageCount(res.data.pages_count);
-				setLoadingQuestions(false);
+				setLoadingBlogs(false);
 			})
 			.catch((err) => {
-				setQuestions(null);
-				setLoadingQuestions(false);
+				setBlogs(null);
+				setLoadingBlogs(false);
 			});
 	};
 
@@ -54,14 +54,14 @@ const Profile = () => {
 				setLoadingProfile(false);
 			})
 			.catch((err) => setIsError(true));
-		fetchQuestions();
+		fetchBlogs();
 	}, [username, currentPage, perPage]);
 	if (isError) return <Redirect to="/404" />;
 	return token ? (
 		<>
 			<Helmet>
 				<title>
-					{user ? `${user.username} - Technota` : "Technota"}
+					{user ? `${user.username} - 校园博客论坛` : "校园博客论坛"}
 				</title>
 			</Helmet>
 			<Navbar />
@@ -75,23 +75,23 @@ const Profile = () => {
 					gap={{ md: 4, base: 0 }}
 				>
 					<GridItem colSpan={{ md: 2, base: 1 }}>
-						{loadingQuestions ? (
+						{loadingblogs ? (
 							Array.from(
 								{ length: perPage },
 								(_, i) => i + 1
 							).map((i) => (
-								<QuestionCardSkeleton
+								<BlogCardSkeleton
 									contentLines={5}
 									key={i}
 								/>
 							))
-						) : questions !== null ? (
+						) : blogs !== null ? (
 							<>
-								{questions.map((question, i) => (
-									<QuestionCard
+								{blogs.map((blog, i) => (
+									<BlogCard
 										key={i}
-										question={question}
-										fetchQuestions={fetchQuestions}
+										blog={blog}
+										fetchBlogs={fetchBlogs}
 									/>
 								))}
 								<Pagination
@@ -112,7 +112,7 @@ const Profile = () => {
 									md: "3xl",
 								}}
 							>
-								{username} has no questions
+								{username} 还没有发布过博客
 							</Heading>
 						)}
 					</GridItem>

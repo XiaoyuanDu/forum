@@ -20,7 +20,7 @@ const Login = () => {
 	return token === null ? (
 		<BaseFormSVG svg={LoginSVG}>
 			<Helmet>
-				<title>Login - Technota</title>
+				<title>登录 - 校园博客论坛</title>
 			</Helmet>
 			<Formik
 				initialValues={{
@@ -29,13 +29,13 @@ const Login = () => {
 				}}
 				validationSchema={Yup.object({
 					username: Yup.string()
-						.min(3, "Must be atleast 3 characters")
-						.max(12, "Must be Atleast 12 Characters or less")
-						.required("This Field is Required"),
+						.min(3, "最少3个字符")
+						.max(12, "最多12个字符")
+						.required("用户名不能为空"),
 					password: Yup.string()
-						.min(8, "Must be atleast 8 characters")
-						.max(20, "Must be Atleast 20 Characters or less")
-						.required("This Field is Required"),
+						.min(8, "最少8个字符")
+						.max(20, "最多20个字符")
+						.required("密码不能为空"),
 				})}
 				onSubmit={(
 					{ username, password },
@@ -97,21 +97,21 @@ const Login = () => {
 				{(props) => (
 					<Form>
 						<MyFormTextInput
-							label="Username"
+							label="用户名"
 							name="username"
 							icon={FaUserAlt}
-							placeholder="Username"
+							placeholder="用户名"
 						/>
 						<MyFormTextInput
-							label="Password"
+							label="密码"
 							name="password"
 							type="password"
 							icon={FaKey}
-							placeholder="Password"
+							placeholder="密码"
 						/>
 						<Text mt={4}>
-							Do Not Have Account?{" "}
-							<TextLink text="Signup" to="/signup" />
+							还没有账户?{" "}
+							<TextLink text="注册" to="/signup" />
 						</Text>
 						<Button
 							mt={4}
@@ -120,11 +120,11 @@ const Login = () => {
 							isFullWidth={true}
 							leftIcon={<FaSignInAlt />}
 						>
-							Login
+							登录
 						</Button>
 						<Box mt={4}>
 							<TextLink
-								text="Forget Password?"
+								text="忘记密码?"
 								to="/forget-password"
 							/>
 						</Box>

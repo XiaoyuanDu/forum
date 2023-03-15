@@ -31,13 +31,13 @@ const ChangePasswordModal = () => {
 				leftIcon={<InfoOutlineIcon />}
 				colorScheme="orange"
 			>
-				Change Password
+				更改密码
 			</Button>
 
 			<Modal isOpen={isOpen} onClose={onClose} size="xl">
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader>Change Password</ModalHeader>
+					<ModalHeader>更改密码</ModalHeader>
 					<ModalCloseButton />
 					<Formik
 						initialValues={{
@@ -120,25 +120,25 @@ const ChangePasswordModal = () => {
 							<Form>
 								<ModalBody>
 									<MyFormTextInput
-										label="Current Password"
+										label="当前密码"
 										name="current_password"
 										type="password"
 										icon={FaKey}
-										placeholder="Current Password"
+										placeholder="当前密码"
 									/>
 									<MyFormTextInput
-										label="New Password"
+										label="新密码"
 										name="new_password"
 										type="password"
 										icon={FaKey}
-										placeholder="New Password"
+										placeholder="新密码"
 									/>
 									<MyFormTextInput
-										label="Confirm New Password"
+										label="确认新密码"
 										name="confirm_new_password"
 										type="password"
 										icon={FaKey}
-										placeholder="Confirm New Password"
+										placeholder="确认新密码"
 									/>
 								</ModalBody>
 								<ModalFooter>
@@ -148,13 +148,13 @@ const ChangePasswordModal = () => {
 										mr={3}
 										colorScheme="orange"
 									>
-										Change Password
+										更改密码
 									</Button>
 									<Button
 										colorScheme="gray"
 										onClick={onClose}
 									>
-										Close
+										关闭
 									</Button>
 								</ModalFooter>
 							</Form>

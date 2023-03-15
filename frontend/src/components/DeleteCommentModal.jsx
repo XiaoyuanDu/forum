@@ -16,29 +16,26 @@ import {
 import axios from "axios";
 import { backendHost } from "./../config";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { useHistory } from "react-router-dom";
 
-const DeleteQuestionModal = ({ question, fetchQuestions, isRedirect }) => {
+const DeleteCommentModal = ({ comment, fetchBlog }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [isDeleting, setIsDeleting] = useState(false);
 	const toast = useToast();
-	const history = useHistory();
 
-	const deleteQuestion = () => {
+	const deleteComment = () => {
 		setIsDeleting(true);
 		axios
-			.delete(backendHost + `/api/forum/questions/${question.slug}/`)
+			.delete(backendHost + `/api/forum/comments/${comment.id}/`)
 			.then((res) => {
 				setIsDeleting(false);
 				onClose();
 				toast({
-					title: "Question Deleted",
+					title: "Comment Deleted",
 					status: "error",
 					duration: 20000,
 					isClosable: true,
 				});
-				if (isRedirect) history.push("/");
-				else fetchQuestions();
+				fetchBlog();
 			})
 			.catch((err) => {
 				setIsDeleting(false);
@@ -49,7 +46,6 @@ const DeleteQuestionModal = ({ question, fetchQuestions, isRedirect }) => {
 	return (
 		<>
 			<IconButton
-				aria-label="delete-question"
 				onClick={onOpen}
 				size="sm"
 				colorScheme="red"
@@ -59,18 +55,16 @@ const DeleteQuestionModal = ({ question, fetchQuestions, isRedirect }) => {
 			<Modal isOpen={isOpen} onClose={onClose} size="xl">
 				<ModalOverlay />
 				<ModalContent onTouchCancel={(e) => e.preventDefault()}>
-					<ModalHeader>Delete Question</ModalHeader>
+					<ModalHeader>Delete Comment</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
-						<Text>
-							Do you want to delete question {question.title}?
-						</Text>
+						<Text>Do you want to delete comment?</Text>
 					</ModalBody>
 					<ModalFooter>
 						<Button
 							mr={3}
 							isLoading={isDeleting}
-							onClick={deleteQuestion}
+							onClick={deleteComment}
 							colorScheme="red"
 						>
 							Delete
@@ -85,4 +79,4 @@ const DeleteQuestionModal = ({ question, fetchQuestions, isRedirect }) => {
 	);
 };
 
-export default DeleteQuestionModal;
+export default DeleteCommentModal;

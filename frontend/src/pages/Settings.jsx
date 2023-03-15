@@ -38,7 +38,7 @@ const Settings = () => {
 	return token ? (
 		<>
 			<Helmet>
-				<title>Settings - Technota</title>
+				<title>设置 - 校园博客论坛</title>
 			</Helmet>
 			<Navbar />
 			<Container maxW="container.lg" minWidth="auto">
@@ -62,7 +62,7 @@ const Settings = () => {
 									px={6}
 								>
 									<HStack>
-										<Heading fontSize={"2xl"}>Bio</Heading>
+										<Heading fontSize={"2xl"}>自我介绍</Heading>
 										<EditBioModal />
 									</HStack>
 									<Divider my={2} />
@@ -70,7 +70,7 @@ const Settings = () => {
 
 									<HStack mt={10}>
 										<Heading fontSize={"2xl"}>
-											Skills
+											技能
 										</Heading>
 										<EditSkillsModal />
 									</HStack>
@@ -96,7 +96,7 @@ const Settings = () => {
 										mt={10}
 										colorScheme="red"
 									>
-										Danger Zone
+										谨慎修改
 									</Heading>
 									<Divider my={2} />
 									<Flex
@@ -112,7 +112,7 @@ const Settings = () => {
 									>
 										<Box>
 											<Heading fontSize="md">
-												Change Password
+												更改密码
 											</Heading>
 										</Box>
 										<Spacer />
@@ -131,7 +131,7 @@ const Settings = () => {
 									>
 										<Box>
 											<Heading fontSize="md">
-												Delete this account
+												注销账户
 											</Heading>
 										</Box>
 										<Spacer />

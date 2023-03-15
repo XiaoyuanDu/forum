@@ -31,13 +31,13 @@ const EditSkillsModal = () => {
 	return (
 		<>
 			<Link onClick={onOpen} pl={2}>
-				<Icon as={FaPencilAlt} /> Edit
+				<Icon as={FaPencilAlt} /> 编辑
 			</Link>
 
 			<Modal isOpen={isOpen} onClose={onClose} size="xl">
 				<ModalOverlay />
 				<ModalContent onTouchCancel={(e) => e.preventDefault()}>
-					<ModalHeader>Edit Skills</ModalHeader>
+					<ModalHeader>编辑技能</ModalHeader>
 					<ModalCloseButton />
 					<Formik
 						initialValues={{
@@ -49,9 +49,9 @@ const EditSkillsModal = () => {
 							skills: Yup.string()
 								.max(
 									100,
-									"Must be Atleast 100 Characters or less"
+									"最多100个字符"
 								)
-								.required("This Field is Required"),
+								.required("不能为空"),
 						})}
 						onSubmit={(
 							{ skills },
@@ -68,7 +68,7 @@ const EditSkillsModal = () => {
 									onClose();
 									userDispatch(UpdateSkills(skillsArray));
 									toast({
-										title: "Skills Successfully Updated",
+										title: "成功更新技能",
 										status: "success",
 										duration: 20000,
 										isClosable: true,
@@ -84,10 +84,10 @@ const EditSkillsModal = () => {
 							<Form>
 								<ModalBody>
 									<MyFormTextareaInput
-										label="Skills"
+										label="技能"
 										name="skills"
-										placeholder="Skills"
-										helpText="Seprate each skill with comma"
+										placeholder="技能"
+										helpText="用逗号分隔每个技能"
 										maxLength={100}
 									/>
 								</ModalBody>
@@ -97,13 +97,13 @@ const EditSkillsModal = () => {
 										type="submit"
 										mr={3}
 									>
-										Edit
+										编辑
 									</Button>
 									<Button
 										colorScheme="gray"
 										onClick={onClose}
 									>
-										Close
+										关闭
 									</Button>
 								</ModalFooter>
 							</Form>

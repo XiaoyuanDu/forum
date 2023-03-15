@@ -13,15 +13,15 @@
         });
     }
 
-    function showQuestion(options) {
+    function showBlog(options) {
         hide(options.acrossClears);
-        show(options.acrossQuestions);
+        show(options.acrossBlogs);
         hide(options.allContainer);
     }
 
     function showClear(options) {
         show(options.acrossClears);
-        hide(options.acrossQuestions);
+        hide(options.acrossBlogs);
         document.querySelector(options.actionContainer).classList.remove(options.selectedClass);
         show(options.allContainer);
         hide(options.counterContainer);
@@ -29,7 +29,7 @@
 
     function reset(options) {
         hide(options.acrossClears);
-        hide(options.acrossQuestions);
+        hide(options.acrossBlogs);
         hide(options.allContainer);
         show(options.counterContainer);
     }
@@ -42,7 +42,7 @@
 
     function checker(actionCheckboxes, options, checked) {
         if (checked) {
-            showQuestion(options);
+            showBlog(options);
         } else {
             reset(options);
         }
@@ -68,7 +68,7 @@
         const allToggle = document.getElementById(options.allToggleId);
         allToggle.checked = sel === actionCheckboxes.length;
         if (allToggle.checked) {
-            showQuestion(options);
+            showBlog(options);
         } else {
             clearAcross(options);
         }
@@ -79,7 +79,7 @@
         counterContainer: "span.action-counter",
         allContainer: "div.actions span.all",
         acrossInput: "div.actions input.select-across",
-        acrossQuestions: "div.actions span.question",
+        acrossBlogs: "div.actions span.blog",
         acrossClears: "div.actions span.clear",
         allToggleId: "action-toggle",
         selectedClass: "selected"
@@ -104,7 +104,7 @@
             updateCounter(actionCheckboxes, options);
         });
 
-        document.querySelectorAll(options.acrossQuestions + " a").forEach(function(el) {
+        document.querySelectorAll(options.acrossBlogs + " a").forEach(function(el) {
             el.addEventListener('click', function(event) {
                 event.preventDefault();
                 const acrossInput = document.querySelector(options.acrossInput);

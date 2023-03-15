@@ -21,60 +21,62 @@ import {
 } from "@chakra-ui/react";
 
 import Footer from "../components/Footer";
-import QuestionCard from "../components/QuestionCard";
+import BlogCard from "../components/BlogCard";
 import Pagination from "../components/Pagination";
-import PopularTopicsCard from "../components/PopularTopicsCard";
+import PopularTagsCard from "../components/PopularTagsCard";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import MyFormTextareaInput from "../components/TextFields/MyFormTextAreaInput";
 import MyFormTextInput from "../components/TextFields/MyFormTextInput";
 import { FaSearch } from "react-icons/fa";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import QuestionCardSkeleton from "../components/QuestionCardSkeleton";
+import BlogCardSkeleton from "../components/BlogCardSkeleton";
+import MyFormMarkdownInput from "../components/TextFields/MyFormMarkdownInput";
+// import wc from 'sensitive-word-filter'
 
 const Home = () => {
-	const [questions, setQuestions] = useState(null);
+	const [blogs, setBlogs] = useState(null);
 	const [token] = useContext(tokenContext);
 	const [perPage] = useState(10);
 	const [pageCount, setPageCount] = useState(0);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [count, setCount] = useState(0);
+	const [content, setContent] = useState('\n\n\n\n\n\n\n\n\n')
 	const ordering = {
 		latest: "-date_modified",
 		oldest: "date_modified",
 		title: "title",
 	};
-	const [questionOrder, setQuestionOrder] = useState(ordering.latest);
+	const [blogOrder, setBlogOrder] = useState(ordering.latest);
 	const [loading, setLoading] = useState(true);
 	const CardBackground = useColorModeValue("white", "gray.700");
 	const toast = useToast();
-	const fetchQuestions = (search) => {
+	const fetchBlogs = (search) => {
 		window.scrollTo(0, 0);
 		let url = search
 			? backendHost +
-			  `/api/forum/questions/?page=${currentPage}&size=${perPage}&ordering=${questionOrder}&search=${search}`
+			  `/api/forum/blogs/?page=${currentPage}&size=${perPage}&ordering=${blogOrder}&search=${search}`
 			: backendHost +
-			  `/api/forum/questions/?page=${currentPage}&size=${perPage}&ordering=${questionOrder}`;
-		if (token)
+			  `/api/forum/blogs/?page=${currentPage}&size=${perPage}&ordering=${blogOrder}`;
 			axios
 				.get(url, {
-					headers: {
+					headers: token ? {
 						Authorization: `Bearer ${token.access}`,
-					},
+					} : {},
 				})
 				.then((res) => {
-					setQuestions(res.data.results);
-					setCount(res.data.count);
+					setBlogs(res.data.results);
+					setCount(res.data.count);   
 					setPageCount(res.data.pages_count);
 					setLoading(false);
 				})
-				.catch((err) => setQuestions(null));
+				.catch((err) => setBlogs(null));
 	};
 	useEffect(() => {
-		fetchQuestions();
-	}, [currentPage, perPage, token, questionOrder]);
+		fetchBlogs();
+	}, [currentPage, perPage, token, blogOrder]);
 
-	return token ? (
+	return (
 		<>
 			<Navbar />
 			<Container maxW="container.lg" minWidth="auto">
@@ -95,14 +97,14 @@ const Home = () => {
 								validationSchema={Yup.object({
 									search: Yup.string().max(
 										250,
-										"Must be Atleast 250 Characters or less"
+										"最多250个字符"
 									),
 								})}
 								onSubmit={(
 									{ search },
 									{ setSubmitting, resetForm, setFieldError }
 								) => {
-									if (token) fetchQuestions(search);
+									fetchBlogs(search);
 									setSubmitting(false);
 								}}
 							>
@@ -112,7 +114,7 @@ const Home = () => {
 											label=""
 											icon={FaSearch}
 											name="search"
-											placeholder="Search"
+											placeholder="搜索..."
 											maxLength={250}
 											rightElement={
 												<Button
@@ -123,7 +125,7 @@ const Home = () => {
 													size="sm"
 													m={1}
 												>
-													Search
+													搜索
 												</Button>
 											}
 										/>
@@ -137,38 +139,38 @@ const Home = () => {
 										colorScheme="gray"
 										rightIcon={<ChevronDownIcon />}
 									>
-										Order By
+										排序条件
 									</MenuButton>
 									<MenuList>
 										<MenuItem
 											onClick={() => {
-												setQuestionOrder(
+												setBlogOrder(
 													ordering.latest
 												);
 												setLoading(true);
 											}}
 										>
-											By Latest
+											按时间从新到旧
 										</MenuItem>
 										<MenuItem
 											onClick={() => {
-												setQuestionOrder(
+												setBlogOrder(
 													ordering.oldest
 												);
 												setLoading(true);
 											}}
 										>
-											By Oldest
+											按时间从旧到新
 										</MenuItem>
 										<MenuItem
 											onClick={() => {
-												setQuestionOrder(
+												setBlogOrder(
 													ordering.title
 												);
 												setLoading(true);
 											}}
 										>
-											By Title
+											按标题
 										</MenuItem>
 									</MenuList>
 								</Menu>
@@ -178,18 +180,18 @@ const Home = () => {
 									{ length: perPage },
 									(_, i) => i + 1
 								).map((i) => (
-									<QuestionCardSkeleton
+									<BlogCardSkeleton
 										contentLines={5}
 										key={i}
 									/>
 								))
-							) : questions !== null && questions.length > 0 ? (
+							) : blogs !== null && blogs.length > 0 ? (
 								<>
-									{questions.map((question, i) => (
-										<QuestionCard
+									{blogs.map((blog, i) => (
+										<BlogCard
 											key={i}
-											question={question}
-											fetchQuestions={fetchQuestions}
+											blog={blog}
+											fetchBlogs={fetchBlogs}
 										/>
 									))}
 									<Pagination
@@ -210,7 +212,7 @@ const Home = () => {
 										md: "3xl",
 									}}
 								>
-									No Questions Found
+									没有博客匹配
 								</Heading>
 							)}
 							{}
@@ -222,40 +224,34 @@ const Home = () => {
 								p={6}
 							>
 								<Heading my={4} fontSize={"3xl"}>
-									Post a Question
+									发表博客
 								</Heading>
 								<Formik
 									initialValues={{
 										title: "",
-										content: "",
 										tags: "",
 									}}
 									validationSchema={Yup.object({
 										title: Yup.string()
 											.min(
 												10,
-												"Must be atleast 10 characters"
+												"最少十个字符"
 											)
 											.max(
 												250,
-												"Must be Atleast 250 Characters or less"
+												"最多250个字符"
 											)
-											.required("This Field is Required"),
-										content: Yup.string()
-											.max(
-												1000,
-												"Must be Atleast 1000 Characters or less"
-											)
-											.required("This Field is Required"),
+											.required("标题不能为空"),
+
 										tags: Yup.string()
 											.max(
 												150,
-												"Must be Atleast 150 Characters or less"
+												"最多150个字符"
 											)
-											.required("This Field is Required"),
+											.required("必须有至少一个标签"),
 									})}
 									onSubmit={(
-										{ title, content, tags },
+										{ title, tags },
 										{
 											setSubmitting,
 											resetForm,
@@ -267,83 +263,95 @@ const Home = () => {
 											.map((str) => ({
 												name: str,
 											}));
-										axios
-											.post(
-												backendHost +
-													`/api/forum/questions/`,
-												{
-													title,
-													content,
-													tags: tagsArray,
-												}
-											)
-											.then((res) => {
-												resetForm();
-												setSubmitting(false);
-												fetchQuestions();
+										if (token) 
+											axios
+												.post(
+													backendHost +
+														`/api/forum/blogs/`,
+													{
+														title,
+														content:content.replace(/^\s+|\s+$/g,''),
+														tags: tagsArray,
+													}
+												)
+												.then((res) => {
+													resetForm();
+													setSubmitting(false);
+													fetchBlogs();
+													toast({
+														title: "你的博客发布成功了",
+														status: "success",
+														duration: 20000,
+														isClosable: true,
+													});
+												})
+												.catch(({ response }) => {
+													setSubmitting(false);
+													if (response) {
+														let errors = response.data;
+														let errorKeys =
+															Object.keys(errors);
+														errorKeys.map((val) => {
+															if (
+																Array.isArray(
+																	errors[val]
+																)
+															) {
+																setFieldError(
+																	val,
+																	errors[val][0]
+																);
+																return null;
+															} else {
+																setFieldError(
+																	val,
+																	errors[val]
+																);
+																return null;
+															}
+														});
+													}
+												});
+											else
 												toast({
-													title: "Your Question Posted Sucessfully",
-													status: "success",
-													duration: 20000,
+													title: "请先登录才能发布博客",
+													status: "error",
+													duration: 2000,
 													isClosable: true,
 												});
-											})
-											.catch(({ response }) => {
 												setSubmitting(false);
-												if (response) {
-													let errors = response.data;
-													let errorKeys =
-														Object.keys(errors);
-													errorKeys.map((val) => {
-														if (
-															Array.isArray(
-																errors[val]
-															)
-														) {
-															setFieldError(
-																val,
-																errors[val][0]
-															);
-															return null;
-														} else {
-															setFieldError(
-																val,
-																errors[val]
-															);
-															return null;
-														}
-													});
-												}
-											});
 									}}
 								>
 									{(props) => (
-										<Form>
+										<Form >
 											<MyFormTextInput
-												label="Title"
+												label="标题"
 												name="title"
-												placeholder="Title"
+												placeholder="标题"
 												maxLength={250}
 											/>
-											<MyFormTextareaInput
-												label="Content"
+											<MyFormMarkdownInput
+												label="内容"
 												name="content"
-												placeholder="Content"
+												placeholder="内容"
 												maxLength={1000}
+												value={content}
+												onChange={(value, viewUpdate) => setContent(value)}
 											/>
 											<MyFormTextareaInput
-												label="Tags"
+												label="标签"
 												name="tags"
-												placeholder="Tags"
+												placeholder="标签"
 												maxLength={150}
-												helpText="Seprate each tag with comma"
+												helpText="用逗号分隔每个标签"
 											/>
 											<Button
 												isLoading={props.isSubmitting}
 												type="submit"
 												mt={2}
+												
 											>
-												Post Question
+												发布
 											</Button>
 										</Form>
 									)}
@@ -351,15 +359,13 @@ const Home = () => {
 							</Box>
 						</GridItem>
 						<GridItem colSpan={1}>
-							<PopularTopicsCard />
+							<PopularTagsCard />
 						</GridItem>
 					</Grid>
 				</>
 			</Container>
 			<Footer />
 		</>
-	) : (
-		<Redirect to="/login" />
 	);
 };
 

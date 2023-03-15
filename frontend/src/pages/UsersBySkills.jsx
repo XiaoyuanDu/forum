@@ -109,7 +109,7 @@ const UsersBySkills = () => {
 						md: "4xl",
 					}}
 				>
-					Users who know {skill} ({count})
+					了解 {skill} ({count}) 的用户
 				</Heading>
 
 				{loading
